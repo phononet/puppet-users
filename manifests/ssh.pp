@@ -39,7 +39,7 @@ define users::ssh (
       group   => $title,
       mode    => '640',
       require => File [ "ssh_dir_${title}" ],
-      content => $sshkey,
+      content => template( 'users/authorized_keys.erb' )
     }
   }
 }

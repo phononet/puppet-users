@@ -1,0 +1,5 @@
+phononet-users 0.0.2:
+  * sshkey variable can be an array. authorized_keys file will be created from a template
+
+phononet-users 0.0.1:
+  * Initial release

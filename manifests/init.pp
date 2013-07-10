@@ -1,6 +1,6 @@
 # Class: users
-#
-# This module manages user
+#   This module manage the users on a Linux system. The users can be created, removed an modified.
+#   For creating a user, you should call "users::manage" type
 #
 # Parameters:
 #
@@ -10,6 +10,7 @@
 #   Nothing
 #
 # Sample Usage:
+# include users
 #
 
 class users {}
