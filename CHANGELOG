@@ -1,3 +1,7 @@
+01-08-2013 release 0.0.3:
+  * make to remove user root unpossible
+  * chaged mode of home directory, user 755, root 750
+
 phononet-users 0.0.2:
   * sshkey variable can be an array. authorized_keys file will be created from a template
 

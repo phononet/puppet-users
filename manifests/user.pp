@@ -10,9 +10,16 @@ define users::user (
 )
 {
   include users::params
-  $home_real = $home ? {
-    'UNSET' => $users::params::home,
-    default => $home,
+  if ( $title == 'root' ) {
+    $home_real = undef
+    $ensure_real = 'present'
+  } else {
+    $ensure_real = $ensure
+    $home_real = $home ? {
+      'UNSET' => "${users::params::home}/${title}",
+      ''      => "${users::params::home}/${title}",
+      default => "${home}/${title}",
+    }
   }
   $shell_real = $shell ? {
     'UNSET' => $users::params::shell,
@@ -21,11 +28,11 @@ define users::user (
 
  # Create user
   user { $title:
-    ensure     => $ensure,
+    ensure     => $ensure_real,
     uid        => $uid,
     gid        => $gid,
     comment    => $comment,
-    home       => "${home_real}/${title}",
+    home       => $home_real,
     groups     => $groups,
     shell      => $shell_real,
     password   => $password,

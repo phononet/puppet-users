@@ -5,11 +5,21 @@ define users::ssh (
 )
 {
   include users::params
-  $home_real = $home ? {
-    'UNSET' => $users::params::home,
-    default => $home,
+  if ( $title == 'root' ) {
+    $home_real        = '/root'
+    $ensure_directory = 'directory'
+  } else {
+    $ensure_real = $ensure
+    $home_real = $home ? {
+      'UNSET' => "${users::params::home}/${title}",
+      ''      => "${users::params::home}/${title}",
+      default => "${home}/${title}",
+    }
+    $ensure_directory = $ensure ? {
+      'present' => 'directory',
+      default   => $ensure,
+    }
   }
-
   if ( $sshkey != '' ) {
     if $ensure == 'absent' {
       $owner = undef
@@ -19,22 +29,18 @@ define users::ssh (
       $owner = $title
       $group = $title
     }
-    $ensure_directory = $ensure ? {
-      'present'  => 'directory',
-      default    => $ensure,
-    }
     file { "ssh_dir_${title}":
       ensure  => $ensure_directory,
-      path    => "${home_real}/${title}/.ssh",
+      path    => "${home_real}/.ssh",
       owner   => $owner,
       group   => $group,
       mode    => '700',
-      require => File [ "${home_real}/${title}" ],
+      require => File [ $home_real ],
     }
 
     file { "authorized_keys_${title}":
       ensure  => $ensure,
-      path    => "${home_real}/${title}/.ssh/authorized_keys",
+      path    => "${home_real}/.ssh/authorized_keys",
       owner   => $title,
       group   => $title,
       mode    => '640',

@@ -1,6 +1,6 @@
 class users::params {
-  $home = '/home'
   $shell = '/bin/bash'
+  $home  = '/home'
 
   case $operatingsystem {
     'debian', 'ubuntu', 'centos': { $supported = true }
