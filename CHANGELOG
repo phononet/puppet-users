@@ -1,5 +1,5 @@
 01-08-2013 release 0.0.3:
-  * make to remove user root unpossible
+  * user root should impossible to remove
   * chaged mode of home directory, user 755, root 750
 
 phononet-users 0.0.2:
