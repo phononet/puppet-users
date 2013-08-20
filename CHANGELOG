@@ -1,6 +1,9 @@
+20-08-2013 release 0.0.4:
+  * [BUGFIX] Don't create prefix home dir if ensure parameter is set 'absent'
+
 01-08-2013 release 0.0.3:
-  * user root should impossible to remove
-  * chaged mode of home directory, user 755, root 750
+  * user root should not be removed
+  * chage mode of home directory, user 755, root 750
 
 phononet-users 0.0.2:
   * sshkey variable can be an array. authorized_keys file will be created from a template
