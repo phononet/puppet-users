@@ -1,3 +1,4 @@
+# == Define users.user
 define users::user (
   $uid      = undef,
   $gid      = undef,
@@ -26,7 +27,7 @@ define users::user (
     default => $shell,
   }
 
- # Create user
+  # Create user
   user { $title:
     ensure     => $ensure_real,
     uid        => $uid,

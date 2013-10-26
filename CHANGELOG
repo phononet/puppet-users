@@ -1,3 +1,6 @@
+26-10-2013 release 0.0.5:
+  * puppet-lint small fixes
+
 20-08-2013 release 0.0.4:
   * [BUGFIX] Don't create prefix home dir if ensure parameter is set 'absent'
 

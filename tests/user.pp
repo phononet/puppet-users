@@ -1,5 +1,5 @@
 users::user { 'hans':
-	uid		=> '1024',
-	ensure	=> 'present',
-	groups	=> [ 'adm' ],
+  ensure  => 'present',
+  uid     => '1024',
+  groups  => [ 'adm' ],
 }

@@ -1,3 +1,4 @@
+# == Define users::ssh
 define users::ssh (
   $ensure = 'present',
   $sshkey = '',
@@ -34,7 +35,7 @@ define users::ssh (
       path    => "${home_real}/.ssh",
       owner   => $owner,
       group   => $group,
-      mode    => '700',
+      mode    => '0700',
       require => File [ $home_real ],
     }
 
@@ -43,7 +44,7 @@ define users::ssh (
       path    => "${home_real}/.ssh/authorized_keys",
       owner   => $title,
       group   => $title,
-      mode    => '640',
+      mode    => '0640',
       require => File [ "ssh_dir_${title}" ],
       content => template( 'users/authorized_keys.erb' )
     }

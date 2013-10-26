@@ -1,3 +1,4 @@
+# == Define users::home
 define users::home (
   $ensure = 'directory',
   $force  = false,
@@ -23,7 +24,6 @@ define users::home (
       default   => $ensure,
     }
   }
-  # 
   if $ensure == 'absent' {
     $group        = undef
     $owner        = undef

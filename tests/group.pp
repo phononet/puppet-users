@@ -1,4 +1,4 @@
 users::group { 'hans':
-	ensure	=> 'present',
-	gid		=> '1025',
+  ensure => 'present',
+  gid    => '1025',
 }
