@@ -1,3 +1,6 @@
+11-02-2014 release 0.1.0:
+  * Allow to create system user
+
 26-10-2013 release 0.0.5:
   * puppet-lint small fixes
 
