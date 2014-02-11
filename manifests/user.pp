@@ -5,6 +5,7 @@ define users::user (
   $home     = 'UNSET',
   $shell    = 'UNSET',
   $ensure   = 'present',
+  $system   = false,
   $groups   = undef,
   $comment  = undef,
   $password = undef
@@ -36,6 +37,7 @@ define users::user (
     home       => $home_real,
     groups     => $groups,
     shell      => $shell_real,
+    system     => $system,
     password   => $password,
     membership => 'inclusive',
   }
