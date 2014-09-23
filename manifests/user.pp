@@ -19,8 +19,7 @@ define users::user (
     $ensure_real = $ensure
     $home_real = $home ? {
       'UNSET' => "${users::params::home}/${title}",
-      ''      => "${users::params::home}/${title}",
-      default => "${home}/${title}",
+      default => $home,
     }
   }
   $shell_real = $shell ? {

@@ -2,7 +2,8 @@
 define users::home (
   $ensure = 'directory',
   $force  = false,
-  $home   = 'UNSET'
+  $mode   = '0755',
+  $home   = 'UNSET',
 )
 {
   include users::params
@@ -12,12 +13,10 @@ define users::home (
     $ensure_directory = 'directory'
     $mode_real        = '0750'
   } else {
-    $ensure_real = $ensure
-    $mode_real   = '0755'
+    $mode_real   = $mode
     $home_real   = $home ? {
       'UNSET' => "${users::params::home}/${title}",
-      ''      => "${users::params::home}/${title}",
-      default => "${home}/${title}",
+      default => $home,
     }
     $ensure_directory = $ensure ? {
       'present' => 'directory',
@@ -31,12 +30,13 @@ define users::home (
   } else {
     $group        = $title
     $owner        = $title
-    $require_home = Exec [ "${title}_prefix_home" ]
+    $require_home = Exec [ "${title}_home" ]
     # Create prefix dir
-    exec { "${title}_prefix_home":
+    exec { "${title}_home":
+      path      => '/usr/bin:/bin',
       command   => "mkdir -p ${home_real}",
       logoutput => true,
-      onlyif    => "test ! -d ${home_real}",
+      unless    => "test -d ${home_real}",
     }
   }
 

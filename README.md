@@ -4,26 +4,42 @@ This module manage users on Linux servers.
 
 # Quick Start
 
-Create user Bob
+Create user user1
 
 ```puppet
 node default {
-  users::manage { 'bob': }
+  users::manage { 'user1': }
 }
 ```
 
-Set password for user Bob
+Set password for user user1
 
 ```puppet
 node default {
-  users::manage { 'bob':
+  users::manage { 'user1':
     uid      => '1100',
     gid      => '1100',
-    home     => '/home',
+    home     => '/srv/user1',
     shell    => '/bin/bash',
     ensure   => 'present',
     comment  => 'Admin user',
     password => '<shadow password>',
+  }
+}
+```
+
+Add ssh public and private key
+
+```puppet
+node default {
+  users::ssh { 'user1':
+    ensure             => 'present',
+    home               => '/srv/user1',
+    key_ensure         => 'present',
+    key_public_name    => 'test_id_rsa',
+    key_public_source  => 'file:///etc/ssh/ssh_host_rsa_key.pub',
+    key_private_name   => 'test_id_rsa',
+    key_private_source => 'file:///etc/ssh/ssh_host_rsa_key.pub',
   }
 }
 ```
@@ -33,9 +49,30 @@ Add group
 ```puppet
 node default {
   users::group { 'admin' }
-  users::manage { 'bob': groups => 'admin' }
+  users::manage { 'user1': groups => 'admin' }
 }
 ```
+
+Hiera support
+```puppet
+class { 'users':
+  account => user1 => {
+               uid  => '1100',
+               gid  => '1100',
+               home => '/srv/user1',
+             }
+}
+```
+
+Hiera repository
+```puppet
+users::account
+  user1:
+    uid: '1100'
+    gid: '1100'
+    home: '/srv/user1'
+```
+
 ##Reference
 
 ###Defines
@@ -98,6 +135,8 @@ node default {
 
 #####`password`
 
+#####`system`
+
 #####`groups`
 
 ####users::group
@@ -120,7 +159,19 @@ node default {
 
 #####`ensure`
 
-#####`sshkey`
+#####`key_authorized`
+
+#####`key_public_name`
+
+#####`key_public_content`
+
+#####`key_public_source`
+
+#####`key_private_name`
+
+#####`key_private_content`
+
+#####`key_private_source`
 
 #####`home`
 

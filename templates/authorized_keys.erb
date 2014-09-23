@@ -1,3 +1,4 @@
-<% @sshkey.each do | keys | -%>
+# Managed by Puppet
+<% Array(@key_authorized).each do | keys | -%>
 <%= keys %>
 <% end -%>

@@ -1,5 +1,5 @@
 name    'phononet-users'
-version '0.1.0'
+version '0.2.0'
 source 'http://repo.phononet.local/hg/admin/puppet-modules/phononet-users'
 author 'Siegfried Wanke'
 license 'Apache License, Version 2.0'

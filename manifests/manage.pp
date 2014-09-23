@@ -1,120 +1,67 @@
-# Class: users::manage
+# Define: users::manage
 #
-# This module manages users
-#
-# Parameters:
-#   [*ensure*]
-#
-#   [*uid*]
-#
-#   [*gid*]
-#
-#   [*home*]
-#
-#   [*groups*]
-#
-#   [*shell*]
-#
-#   [*comment*]
-#
-#   [*password*]
-#
-#   [*remove_home*]
-#
-# Actions:
-#
-# Requires:
-#   Nothing
-#
-# Sample Usage:
-#   users::manage { 'dummy':
-#     ensure      => 'present',
-#     uid         => '1010',
-#     gid         => '1010',
-#     home        => '/home',
-#     groups      => [ 'adm' ],
-#     shell       => '/bin/bash',
-#     comment     => 'Dummy user',
-#     sshkey      => 'sshkey',
-#     password    => 'secret',
-#   }
-#
-
 define users::manage (
-  $uid         = undef,
-  $gid         = undef,
-  $home        = 'UNSET',
-  $shell       = 'UNSET',
-  $ensure      = 'present',
-  $system      = false,
-  $groups      = undef,
-  $sshkey      = undef,
-  $comment     = undef,
-  $password    = undef,
-  $remove_home = false
+  $uid                 = undef,
+  $gid                 = undef,
+  $mode                = undef,
+  $home                = 'UNSET',
+  $shell               = 'UNSET',
+  $ensure              = 'present',
+  $system              = false,
+  $groups              = undef,
+  $sshkey              = undef,
+  $comment             = undef,
+  $password            = undef,
+  $remove_home         = false,
+  $key_ensure          = undef,
+  $key_public_name     = undef,
+  $key_public_content  = undef,
+  $key_public_source   = undef,
+  $key_private_name    = undef,
+  $key_private_content = undef,
+  $key_private_source  = undef,
 )
 {
-  include users::params
-  if ( $title == 'root' ) {
-    $home_real = '/root'
-  } else {
-    $home_real = $home ? {
-      'UNSET' => $users::params::home,
-      ''      => $users::params::home,
-      default => $home,
-    }
-  }
-  $shell_real = $shell ? {
-    'UNSET' => $users::params::shell,
-    ''      => $users::params::shell,
-    default => $shell,
-  }
-
-  $password_real = $password ? {
-    'UNSET' => undef,
-    'unset' => undef,
-    ''      => undef,
-    default => $password,
-  }
-  $uid_real = $uid ? {
-    'UNSET' => undef,
-    'unset' => undef,
-    ''      => undef,
-    default => $uid,
-  }
-  $gid_real = $gid ? {
-    'UNSET' => undef,
-    'unset' => undef,
-    ''      => undef,
-    default => $gid,
-  }
-
   users::user { $title:
     ensure   => $ensure,
-    uid      => $uid_real,
-    gid      => $gid_real,
-    home     => $home_real,
-    shell    => $shell_real,
+    uid      => $uid,
+    gid      => $gid,
+    home     => $home,
+    shell    => $shell,
     system   => $system,
     groups   => $groups,
     comment  => $comment,
-    password => $password_real,
-    }
+    password => $password,
+  }
   if $gid != '' {
     users::group { $title:
       ensure => $ensure,
-      gid    => $gid_real,
+      gid    => $gid,
       user   => $title,
     }
   }
   users::home { $title:
-    ensure => $ensure,
-    home   => $home_real,
-    force  => $remove_home,
+    ensure  => $ensure,
+    home    => $home,
+    mode    => $mode,
+    force   => $remove_home,
+    require => Users::User [ $title ],
   }
-  users::ssh { $title:
-    ensure => $ensure,
-    home   => $home_real,
-    sshkey => $sshkey,
+  if $sshkey != '' or $key_public_content != '' or
+    $key_public_source != '' or $key_private_content != '' or
+    $key_private_source != '' {
+    users::ssh { $title:
+      ensure              => $ensure,
+      home                => $home,
+      key_authorized      => $sshkey,
+      key_ensure          => $key_ensure,
+      key_public_name     => $key_public_name,
+      key_public_content  => $key_public_content,
+      key_public_source   => $key_public_source,
+      key_private_name    => $key_private_name,
+      key_private_content => $key_private_content,
+      key_private_source  => $key_private_source,
+      require             => Users::Home [ $title ],
+    }
   }
 }
