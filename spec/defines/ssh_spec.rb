@@ -120,4 +120,5 @@ describe 'users::ssh' do
         }
       end
     end
+  end
 end
