@@ -2,4 +2,4 @@
 .*\.swo
 \.gemfile.lock
 pkg/
-spec/fixtures/.*
+spec/fixtures/

@@ -107,7 +107,7 @@ users::account
 
   Set user password.
 
-#####`sshkey`
+#####`key_authorized`
 
   Add ssh public key to the user. (Array)
 

@@ -9,11 +9,11 @@ define users::manage (
   $ensure              = 'present',
   $system              = false,
   $groups              = undef,
-  $sshkey              = undef,
   $comment             = undef,
   $password            = undef,
   $remove_home         = false,
   $key_ensure          = undef,
+  $key_authorized      = undef,
   $key_public_name     = undef,
   $key_public_content  = undef,
   $key_public_source   = undef,
@@ -47,13 +47,13 @@ define users::manage (
     force   => $remove_home,
     require => Users::User [ $title ],
   }
-  if $sshkey != '' or $key_public_content != '' or
+  if $key_authorized != '' or $key_public_content != '' or
     $key_public_source != '' or $key_private_content != '' or
     $key_private_source != '' {
     users::ssh { $title:
       ensure              => $ensure,
       home                => $home,
-      key_authorized      => $sshkey,
+      key_authorized      => $key_authorized,
       key_ensure          => $key_ensure,
       key_public_name     => $key_public_name,
       key_public_content  => $key_public_content,

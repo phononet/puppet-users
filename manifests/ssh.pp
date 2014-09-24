@@ -1,6 +1,7 @@
 # == Define users::ssh
 define users::ssh (
   $ensure              = 'present',
+  $user                = $title,
   $home                = 'UNSET',
   $key_authorized      = 'UNSET',
   $key_ensure          = 'present',
@@ -19,7 +20,7 @@ define users::ssh (
   } else {
     $ensure_real = $ensure
     $home_real = $home ? {
-      'UNSET' => "${users::params::home}/${title}",
+      'UNSET' => "${users::params::home}/${user}",
       default => $home,
     }
     $ensure_directory = $ensure ? {
@@ -33,27 +34,28 @@ define users::ssh (
     $key_ensure_real = 'absent'
   }
   else {
-    $owner = $title
-    $group = $title
+    $owner = $user
+    $group = $user
     $key_ensure_real = $key_ensure
   }
 
-  file { "ssh_dir_${title}":
+  $ssh_dir = {
     ensure => $ensure_directory,
     path   => "${home_real}/.ssh",
     owner  => $owner,
     group  => $group,
     mode   => '0700',
   }
+  ensure_resource( 'file', "ssh_dir_${user}", $ssh_dir )
 
   if $key_authorized != 'UNSET' {
     file { "key_authorized_${title}":
       ensure  => $ensure,
       path    => "${home_real}/.ssh/authorized_keys",
-      owner   => $title,
-      group   => $title,
+      owner   => $owner,
+      group   => $group,
       mode    => '0640',
-      require => File [ "ssh_dir_${title}" ],
+      require => File [ "ssh_dir_${user}" ],
       content => template( 'users/authorized_keys.erb' )
     }
   }
@@ -67,10 +69,10 @@ define users::ssh (
     file { "${title}_key_public_${key_public_name}":
       ensure  => $key_ensure_real,
       path    => "${home_real}/.ssh/${key_public_name}.pub",
-      owner   => $title,
-      group   => $title,
+      owner   => $owner,
+      group   => $group,
       mode    => '0640',
-      require => File [ "ssh_dir_${title}" ],
+      require => File [ "ssh_dir_${user}" ],
       content => $key_public_content,
       source  => $key_public_source_real,
     }
@@ -85,10 +87,10 @@ define users::ssh (
     file { "${title}_key_private_${key_private_name}":
       ensure  => $key_ensure_real,
       path    => "${home_real}/.ssh/${key_private_name}",
-      owner   => $title,
-      group   => $title,
+      owner   => $user,
+      group   => $user,
       mode    => '0600',
-      require => File [ "ssh_dir_${title}" ],
+      require => File [ "ssh_dir_${user}" ],
       content => $key_private_content,
       source  => $key_private_source_real,
     }
