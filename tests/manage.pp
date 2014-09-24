@@ -6,7 +6,7 @@ users::manage { 'root':
 users::manage { 'user1':
   ensure      => 'present',
   remove_home => true,
-  sshkey      => [ 'ssh-rsa test', 'ssh-dsa test', ],
+  key_authorized      => [ 'ssh-rsa test', 'ssh-dsa test', ],
   groups      => [ 'adm' ],
 }
 
