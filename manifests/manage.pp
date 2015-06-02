@@ -12,6 +12,7 @@ define users::manage (
   $comment             = undef,
   $password            = undef,
   $remove_home         = false,
+  $ssh_options         = undef,
   $key_ensure          = undef,
   $key_authorized      = undef,
   $key_public_name     = undef,
@@ -49,10 +50,11 @@ define users::manage (
   }
   if $key_authorized != '' or $key_public_content != '' or
     $key_public_source != '' or $key_private_content != '' or
-    $key_private_source != '' {
+    $key_private_source != '' or $ssh_options != '' {
     users::ssh { $title:
       ensure              => $ensure,
       home                => $home,
+      options             => $ssh_options,
       key_authorized      => $key_authorized,
       key_ensure          => $key_ensure,
       key_public_name     => $key_public_name,

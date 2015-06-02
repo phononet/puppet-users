@@ -7,7 +7,7 @@ describe 'users::user' do
       :home => '/home/test',
     } end
 
-    it { should contain_user( 'root' ).with( { :home => '' } ) }
+    it { should contain_user( 'root' ).with( { :home => nil } ) }
   end
 
   context 'user1' do

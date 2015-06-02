@@ -11,6 +11,7 @@ define users::ssh (
   $key_private_name    = 'id_rsa',
   $key_private_content = undef,
   $key_private_source  = undef,
+  $options             = {},
 )
 {
   include users::params
@@ -57,6 +58,18 @@ define users::ssh (
       mode    => '0640',
       require => File [ "ssh_dir_${user}" ],
       content => template( 'users/authorized_keys.erb' )
+    }
+  }
+
+  if !empty($options) {
+    file { "ssh_config_${title}":
+      ensure  => $ensure,
+      path    => "${home_real}/.ssh/config",
+      owner   => $owner,
+      group   => $group,
+      mode    => '0644',
+      require => File [ "ssh_dir_${user}" ],
+      content => template( "${module_name}/config.erb" )
     }
   }
 

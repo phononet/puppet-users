@@ -44,6 +44,31 @@ describe 'users::ssh' do
         } )
       }
     end
+    context 'with set options' do
+      let( :params ) do {
+        :home    => '/srv/user1',
+        :options => { 'Host *' => {
+                        'HostName' => 'test.com',
+                        'IgnoreUnknown' => true,
+                      },
+                    },
+      } end
+      it { should contain_file( 'ssh_config_user1' ).with(
+        {
+          :ensure  => 'present',
+          :path    => '/srv/user1/.ssh/config',
+          :mode    => '0644',
+          :owner   => 'user1',
+          :group   => 'user1',
+        } )
+      }
+      it { should contain_file( 'ssh_config_user1' ).with_content(
+        /# File managed by Puppet/,
+        /Host */,
+        / +HostName test.com/,
+        / +IgnoreUnknown yes/
+      ) }
+    end
     context 'with set authorized_key' do
       let( :params ) do {
         :home            => '/srv/user1',

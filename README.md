@@ -35,6 +35,7 @@ node default {
   users::ssh { 'user1':
     ensure             => 'present',
     home               => '/srv/user1',
+    options            => { 'HashKnownHosts' => 'yes' },
     key_ensure         => 'present',
     key_public_name    => 'test_id_rsa',
     key_public_source  => 'file:///etc/ssh/ssh_host_rsa_key.pub',
@@ -107,6 +108,10 @@ users::account
 
   Set user password.
 
+#####`ssh_options`
+
+  Add ssh options per user
+
 #####`key_authorized`
 
   Add ssh public key to the user. (Array)
@@ -158,6 +163,8 @@ users::account
 ####users::ssh
 
 #####`ensure`
+
+#####`options`
 
 #####`key_authorized`
 
