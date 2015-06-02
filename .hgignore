@@ -3,3 +3,5 @@
 \.gemfile.lock
 pkg/
 spec/fixtures/
+\.git
+\.gitignore
