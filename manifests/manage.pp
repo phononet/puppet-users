@@ -46,7 +46,7 @@ define users::manage (
     home    => $home,
     mode    => $mode,
     force   => $remove_home,
-    require => Users::User [ $title ],
+    require => Users::User[$title],
   }
   if $key_authorized != '' or $key_public_content != '' or
     $key_public_source != '' or $key_private_content != '' or
@@ -63,7 +63,7 @@ define users::manage (
       key_private_name    => $key_private_name,
       key_private_content => $key_private_content,
       key_private_source  => $key_private_source,
-      require             => Users::Home [ $title ],
+      require             => Users::Home[$title],
     }
   }
 }

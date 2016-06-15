@@ -30,7 +30,7 @@ define users::home (
   } else {
     $group        = $title
     $owner        = $title
-    $require_home = Exec [ "${title}_home" ]
+    $require_home = Exec["${title}_home"]
     # Create prefix dir
     exec { "${title}_home":
       path      => '/usr/bin:/bin',

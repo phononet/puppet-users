@@ -56,7 +56,7 @@ define users::ssh (
       owner   => $owner,
       group   => $group,
       mode    => '0640',
-      require => File [ "ssh_dir_${user}" ],
+      require => File["ssh_dir_${user}"],
       content => template( 'users/authorized_keys.erb' )
     }
   }
@@ -68,8 +68,8 @@ define users::ssh (
       owner   => $owner,
       group   => $group,
       mode    => '0644',
-      require => File [ "ssh_dir_${user}" ],
-      content => template( "${module_name}/config.erb" )
+      require => File["ssh_dir_${user}"],
+      content => template("${module_name}/config.erb")
     }
   }
 
@@ -85,7 +85,7 @@ define users::ssh (
       owner   => $owner,
       group   => $group,
       mode    => '0640',
-      require => File [ "ssh_dir_${user}" ],
+      require => File["ssh_dir_${user}"],
       content => $key_public_content,
       source  => $key_public_source_real,
     }
@@ -103,7 +103,7 @@ define users::ssh (
       owner   => $user,
       group   => $user,
       mode    => '0600',
-      require => File [ "ssh_dir_${user}" ],
+      require => File["ssh_dir_${user}"],
       content => $key_private_content,
       source  => $key_private_source_real,
     }
