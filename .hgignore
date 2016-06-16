@@ -1,7 +1,11 @@
+\.rake_task.*
 .*\.swp
 .*\.swo
 \.gemfile.lock
 pkg/
 spec/fixtures/
+log/
+\.vagrant/
+\.bundle
+Gemfile.lock
 \.git
-\.gitignore

@@ -1,0 +1,8 @@
+HOSTS:
+  debian-78-x64:
+    roles:
+      - master
+    platform: debian-7-amd64
+    box: wheezy64
+    box_url: http://images.phononet.local/vagrant/wheezy64
+    hypervisor: vagrant

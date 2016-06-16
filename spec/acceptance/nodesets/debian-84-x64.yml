@@ -1,0 +1,8 @@
+HOSTS:
+  debian-84-x64:
+    roles:
+      - master
+    platform: debian-8-amd64
+    box: jessie64
+    box_url: http://images.phononet.local/vagrant/jessie64
+    hypervisor: vagrant

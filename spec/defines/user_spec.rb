@@ -2,23 +2,23 @@ require 'spec_helper'
 
 describe 'users::user' do
   context 'user root with wrong home directory' do
-    let( :title ){ 'root' }
-    let( :params ) do {
+    let(:title){ 'root' }
+    let(:params) do {
       :home => '/home/test',
     } end
 
-    it { should contain_user( 'root' ).with( { :home => nil } ) }
+    it { should contain_user('root').with({ :home => '/root' }) }
   end
 
   context 'user1' do
-    let( :title ){ 'user1' }
+    let(:title){ 'user1' }
 
     context 'default parameters' do
-      it { should contain_user( 'user1' ) }
+      it { should contain_user('user1') }
     end
 
     context 'set parameters' do
-      let( :params ) do {
+      let(:params) do {
         :ensure     => 'present',
         :uid        => '1099',
         :gid        => '1099',
@@ -27,7 +27,7 @@ describe 'users::user' do
         :password   => 'secure',
       } end
 
-      it { should contain_user( 'user1' ).with(
+      it { should contain_user('user1').with(
         {
           :ensure     => 'present',
           :uid        => '1099',

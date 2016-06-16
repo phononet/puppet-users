@@ -16,32 +16,34 @@ describe 'users::ssh' do
   end
 
   describe 'user1' do
-    let( :title ){ 'user1' }
-    let( :default_params ) do
+    let(:title){ 'user1' }
+    let(:default_params) do
       {
         :key_public_name  => 'id_rsa',
         :key_private_name => 'id_rsa',
       }
     end
 
-    context 'default home parameter' do
-      let( :params ) do {
-        :key_public_name   => 'rsa_id',
-        :key_private_name  => 'rsa_id',
-      } end
+    context 'home parameter' do
+      let(:params) do
+        {
+          :key_public_name  => 'rsa_id',
+          :key_private_name => 'rsa_id',
+        }
+      end
 
-      it { should_not contain_file( 'user1_key_private_rsa_id' ) }
-      it { should_not contain_file( 'user1_key_public_rsa_id' ) }
-      it { should_not contain_file( 'key_authorized_user1' ) }
+      it { is_expected.to_not contain_file('user1_key_private_rsa_id') }
+      it { is_expected.to_not contain_file('user1_key_public_rsa_id') }
+      it { is_expected.to_not contain_file('key_authorized_user1') }
 
-      it { should contain_file( 'ssh_dir_user1' ).with(
+      it { should contain_file('ssh_dir_user1').with(
         {
           :ensure => 'directory',
           :path   => '/home/user1/.ssh',
           :mode   => '0700',
           :owner  => 'user1',
           :group  => 'user1',
-        } )
+        })
       }
     end
     context 'with set options' do
