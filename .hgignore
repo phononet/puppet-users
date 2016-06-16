@@ -8,4 +8,4 @@ log/
 \.vagrant/
 \.bundle
 Gemfile.lock
-\.git
+\.git/

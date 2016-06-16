@@ -1,0 +1,11 @@
+*.swp
+pkg/
+Gemfile.lock
+.rspec_system
+spec/fixtures
+.gemfile.lock
+.hg/
+.hgignore
+.hgtags
+junit/
+log/
