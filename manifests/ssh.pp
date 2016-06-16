@@ -73,8 +73,8 @@ define users::ssh (
     }
   }
 
-  if $key_public_content != '' or $key_public_source != '' {
-    if $key_public_content != '' and $key_public_source != '' {
+  if $key_public_content or $key_public_source {
+    if $key_public_content and $key_public_source {
       $key_public_source_real = undef
     } else {
       $key_public_source_real = $key_public_source
@@ -91,8 +91,8 @@ define users::ssh (
     }
   }
 
-  if $key_private_content != '' or $key_private_source != '' {
-    if $key_private_content != '' and $key_private_source != '' {
+  if $key_private_content or $key_private_source {
+    if $key_private_content and $key_private_source {
       $key_private_source_real = undef
     } else {
       $key_private_source_real = $key_private_source

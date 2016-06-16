@@ -8,6 +8,7 @@ define users::manage (
   $shell               = 'UNSET',
   $ensure              = 'present',
   $system              = false,
+  $group               = undef,
   $groups              = undef,
   $comment             = undef,
   $password            = undef,
@@ -30,24 +31,21 @@ define users::manage (
     home     => $home,
     shell    => $shell,
     system   => $system,
+    group    => $group,
     groups   => $groups,
     comment  => $comment,
     password => $password,
   }
-  if $gid != '' {
-    users::group { $title:
-      ensure => $ensure,
-      gid    => $gid,
-      user   => $title,
-    }
-  }
+
   users::home { $title:
     ensure  => $ensure,
     home    => $home,
+    group   => $group,
     mode    => $mode,
     force   => $remove_home,
     require => Users::User[$title],
   }
+
   if $key_authorized != '' or $key_public_content != '' or
     $key_public_source != '' or $key_private_content != '' or
     $key_private_source != '' or $ssh_options != '' {
