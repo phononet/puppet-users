@@ -8,6 +8,7 @@ define users::manage (
   $shell               = undef,
   $ensure              = 'present',
   $system              = false,
+  $owner               = undef,
   $group               = undef,
   $groups              = undef,
   $comment             = undef,
@@ -27,6 +28,15 @@ define users::manage (
 )
 {
   validate_bool($sftp_jail)
+  validate_bool($remove_home)
+
+  if $sftp_jail {
+    $_home_owner = 'root'
+    $_home_group = 'root'
+  } else {
+    $_home_owner = $owner
+    $_home_group = $group
+  }
 
   users::user { $title:
     ensure   => $ensure,
@@ -44,7 +54,8 @@ define users::manage (
   users::home { $title:
     ensure  => $ensure,
     home    => $home,
-    group   => $group,
+    owner   => $_home_owner,
+    group   => $_home_group,
     mode    => $mode,
     force   => $remove_home,
     require => Users::User[$title],

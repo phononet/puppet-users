@@ -65,6 +65,13 @@ describe 'users::manage' do
         :dirs   => ['incoming', 'outgoing'],
       })
     }
+
+    it { is_expected.to contain_file('/home/user1').with(
+      {
+        :owner => 'root',
+        :group => 'root',
+      })
+    }
   end
 
   context 'user1 with key parameters' do
