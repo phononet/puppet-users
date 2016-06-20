@@ -152,6 +152,11 @@ describe 'users::manage' do
       it { is_expected.to exist }
     end
 
+    describe file('/home/user35') do
+      it { is_expected.to be_owned_by 'root' }
+      it { is_expected.to be_grouped_into 'root' }
+    end
+
     describe file('/home/user35/dev') do
       it { is_expected.to be_directory }
     end
