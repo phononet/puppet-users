@@ -4,8 +4,8 @@ define users::manage (
   $uid                 = undef,
   $gid                 = undef,
   $mode                = undef,
-  $home                = 'UNSET',
-  $shell               = 'UNSET',
+  $home                = undef,
+  $shell               = undef,
   $ensure              = 'present',
   $system              = false,
   $group               = undef,
@@ -13,6 +13,8 @@ define users::manage (
   $comment             = undef,
   $password            = undef,
   $remove_home         = false,
+  $sftp_jail           = false,
+  $sftp_jail_dirs      = undef,
   $ssh_options         = undef,
   $key_ensure          = undef,
   $key_authorized      = undef,
@@ -24,6 +26,8 @@ define users::manage (
   $key_private_source  = undef,
 )
 {
+  validate_bool($sftp_jail)
+
   users::user { $title:
     ensure   => $ensure,
     uid      => $uid,
@@ -46,9 +50,20 @@ define users::manage (
     require => Users::User[$title],
   }
 
-  if $key_authorized != '' or $key_public_content != '' or
-    $key_public_source != '' or $key_private_content != '' or
-    $key_private_source != '' or $ssh_options != '' {
+  if $sftp_jail {
+    users::jail { $title:
+      ensure  => $ensure,
+      mode    => $mode,
+      group   => $group,
+      home    => $home,
+      dirs    => $sftp_jail_dirs,
+      require => Users::User[$title],
+    }
+  }
+
+  if $key_authorized or $key_public_content or
+    $key_public_source or $key_private_content or
+    $key_private_source or $ssh_options {
     users::ssh { $title:
       ensure              => $ensure,
       home                => $home,

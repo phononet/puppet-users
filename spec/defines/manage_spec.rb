@@ -46,5 +46,48 @@ describe 'users::manage' do
         :group => 'dev',
       })
     }
+
+    it { is_expected.to_not contain_users__ssh('user1') }
+  end
+
+  context 'user1 with sftp parameters' do
+    let(:params) do
+      {
+        :sftp_jail      => true,
+        :sftp_jail_dirs => ['incoming', 'outgoing'],
+      }
+    end
+
+    it { is_expected.to contain_users__jail('user1').with(
+      {
+        :ensure => 'present',
+        :home   => '/home/user1',
+        :dirs   => ['incoming', 'outgoing'],
+      })
+    }
+  end
+
+  context 'user1 with key parameters' do
+    let(:params) do
+      {
+        :ssh_options         => { 'Host' => 'dev' },
+        :key_authorized      => 'ssh rsa dev',
+        :key_public_name     => 'sftp_import',
+        :key_public_content  => 'ssh rsa sftp-import',
+        :key_private_name    => 'sftp_import',
+        :key_private_content => 'private key',
+      }
+    end
+
+    it { is_expected.to contain_users__ssh('user1').with(
+      {
+        :ensure              => 'present',
+        :key_authorized      => 'ssh rsa dev',
+        :key_public_name     => 'sftp_import',
+        :key_public_content  => 'ssh rsa sftp-import',
+        :key_private_name    => 'sftp_import',
+        :key_private_content => 'private key',
+      })
+    }
   end
 end

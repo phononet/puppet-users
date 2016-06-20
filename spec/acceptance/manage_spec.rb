@@ -102,7 +102,7 @@ describe 'users::manage' do
         }
       EOS
 
-      apply_manifest(pp, :catch_falures => true, :opts => {:debug => true, :trace => true})
+      apply_manifest(pp, :catch_falures => true)
     end
 
     describe user('user31') do
@@ -131,6 +131,37 @@ describe 'users::manage' do
 
     describe file('/home/user34') do
       it { is_expected.to exist }
+    end
+  end
+
+  context 'create sftp users' do
+    it do
+      pp = <<-EOS
+        users::group { 'sftpuser': }
+        users::manage { 'user35':
+          shell     => '/bin/false',
+          comment   => 'SFTP user',
+          sftp_jail => true,
+          require   => Users::Group['sftpuser'],
+        }
+      EOS
+      apply_manifest(pp, :catch_falures => true)
+    end
+
+    describe user('user35') do
+      it { is_expected.to exist }
+    end
+
+    describe file('/home/user35/dev') do
+      it { is_expected.to be_directory }
+    end
+
+    describe file('/home/user35/in') do
+      it { is_expected.to be_directory }
+    end
+
+    describe file('/home/user35/out') do
+      it { is_expected.to be_directory }
     end
   end
 end
