@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'users::ssh' do
-  context 'user root with wrong home directory' do
+  context 'user root with set home directory' do
     let( :title ){ 'root' }
     let( :params ) do {
       :home => '/home/test',
@@ -10,7 +10,7 @@ describe 'users::ssh' do
     it { should contain_file( 'ssh_dir_root' ).with(
       {
         :ensure => 'directory',
-        :path   => '/root/.ssh',
+        :path   => '/home/test/.ssh',
       } )
     }
   end
@@ -21,6 +21,18 @@ describe 'users::ssh' do
       {
         :key_public_name  => 'id_rsa',
         :key_private_name => 'id_rsa',
+      }
+    end
+
+    context 'with default params' do
+      it { is_expected.to_not contain_file('ssh_dir_user1').with(
+        {
+          :ensure => 'directory',
+          :path   => '/home/user1',
+          :owner  => 'user1',
+          :group  => 'user1',
+          :mode   => '0700',
+        })
       }
     end
 
@@ -46,20 +58,23 @@ describe 'users::ssh' do
         })
       }
     end
+
     context 'with set options' do
       let( :params ) do {
-        :home    => '/srv/user1',
-        :options => { 'Host *' => {
-                        'HostName' => 'test.com',
-                        'IgnoreUnknown' => true,
-                      },
-                    },
+        :home             => '/srv/user1',
+        :mode_config_file => '0440',
+        :options          => {
+          'Host *' => {
+            'HostName' => 'test.com',
+            'IgnoreUnknown' => true,
+          },
+        },
       } end
       it { should contain_file( 'ssh_config_user1' ).with(
         {
           :ensure  => 'present',
           :path    => '/srv/user1/.ssh/config',
-          :mode    => '0644',
+          :mode    => '0440',
           :owner   => 'user1',
           :group   => 'user1',
         } )
@@ -71,21 +86,31 @@ describe 'users::ssh' do
         / +IgnoreUnknown yes/
       ) }
     end
+
     context 'with set authorized_key' do
       let( :params ) do {
-        :home            => '/srv/user1',
-        :key_authorized => [ 'ssh-rsa test', 'ssh-dsa test' ],
+        :home                => '/srv/user1',
+        :key_authorized      => [ 'ssh-rsa test', 'ssh-dsa test' ],
+        :mode_authorized_key => '0440',
       } end
       it { should contain_file( 'key_authorized_user1' ).with(
         {
           :ensure  => 'present',
           :path    => '/srv/user1/.ssh/authorized_keys',
-          :mode    => '0640',
+          :mode    => '0440',
           :owner   => 'user1',
           :group   => 'user1',
           :content => /^ssh-rsa test\nssh-dsa test/,
         } )
       }
+    end
+
+    context 'with set ssh mode' do
+      let( :params ) do {
+        :mode_ssh_dir        => '0750',
+      } end
+
+      it { should contain_file( 'ssh_dir_user1' ).with_mode('0750') }
     end
 
     describe 'key_public is set' do

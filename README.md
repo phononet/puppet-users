@@ -112,6 +112,18 @@ users::account
 
   Add ssh options per user
 
+#####`mode_ssh_dir`
+
+  Default to '0700'
+
+#####`mode_authorized_key`
+
+  Default to '0640'
+
+#####`mode_ssh_config_file`
+
+  Default to '0644'
+
 #####`key_authorized`
 
   Add ssh public key to the user. (Array)
@@ -165,6 +177,18 @@ users::account
 #####`ensure`
 
 #####`options`
+
+#####`mode_ssh_dir`
+
+  Default to '0700'
+
+#####`mode_authorized_key`
+
+  Default to '0640'
+
+#####`mode_config_file`
+
+  Default to '0644'
 
 #####`key_authorized`
 

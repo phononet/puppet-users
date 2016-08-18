@@ -2,7 +2,11 @@
 define users::ssh (
   $ensure              = 'present',
   $user                = $title,
+  $group               = $title,
   $home                = 'UNSET',
+  $mode_ssh_dir        = '0700',
+  $mode_authorized_key = '0640',
+  $mode_config_file    = '0644',
   $key_authorized      = 'UNSET',
   $key_ensure          = 'present',
   $key_public_name     = 'id_rsa',
@@ -15,8 +19,11 @@ define users::ssh (
 )
 {
   include users::params
-  if ( $title == 'root' ) {
-    $home_real        = '/root'
+  if ( $user == 'root' ) {
+    $home_real = $home ? {
+      'UNSET' => '/root',
+      default => $home
+    }
     $ensure_directory = 'directory'
   } else {
     $ensure_real = $ensure
@@ -30,22 +37,22 @@ define users::ssh (
     }
   }
   if $ensure == 'absent' {
-    $owner = undef
-    $group = undef
+    $_user  = undef
+    $_group = undef
     $key_ensure_real = 'absent'
   }
   else {
-    $owner = $user
-    $group = $user
+    $_user  = $user
+    $_group = $group
     $key_ensure_real = $key_ensure
   }
 
   $ssh_dir = {
     ensure => $ensure_directory,
     path   => "${home_real}/.ssh",
-    owner  => $owner,
-    group  => $group,
-    mode   => '0700',
+    owner  => $_user,
+    group  => $_group,
+    mode   => $mode_ssh_dir,
   }
   ensure_resource( 'file', "ssh_dir_${user}", $ssh_dir )
 
@@ -53,9 +60,9 @@ define users::ssh (
     file { "key_authorized_${title}":
       ensure  => $ensure,
       path    => "${home_real}/.ssh/authorized_keys",
-      owner   => $owner,
-      group   => $group,
-      mode    => '0640',
+      owner   => $_user,
+      group   => $_group,
+      mode    => $mode_authorized_key,
       require => File["ssh_dir_${user}"],
       content => template( 'users/authorized_keys.erb' )
     }
@@ -65,9 +72,9 @@ define users::ssh (
     file { "ssh_config_${title}":
       ensure  => $ensure,
       path    => "${home_real}/.ssh/config",
-      owner   => $owner,
-      group   => $group,
-      mode    => '0644',
+      owner   => $_user,
+      group   => $_group,
+      mode    => $mode_config_file,
       require => File["ssh_dir_${user}"],
       content => template("${module_name}/config.erb")
     }
@@ -82,8 +89,8 @@ define users::ssh (
     file { "${title}_key_public_${key_public_name}":
       ensure  => $key_ensure_real,
       path    => "${home_real}/.ssh/${key_public_name}.pub",
-      owner   => $owner,
-      group   => $group,
+      owner   => $_user,
+      group   => $_group,
       mode    => '0640',
       require => File["ssh_dir_${user}"],
       content => $key_public_content,
@@ -100,8 +107,8 @@ define users::ssh (
     file { "${title}_key_private_${key_private_name}":
       ensure  => $key_ensure_real,
       path    => "${home_real}/.ssh/${key_private_name}",
-      owner   => $user,
-      group   => $user,
+      owner   => $_user,
+      group   => $_user,
       mode    => '0600',
       require => File["ssh_dir_${user}"],
       content => $key_private_content,

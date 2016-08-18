@@ -77,18 +77,24 @@ describe 'users::manage' do
   context 'user1 with key parameters' do
     let(:params) do
       {
-        :ssh_options         => { 'Host' => 'dev' },
-        :key_authorized      => 'ssh rsa dev',
-        :key_public_name     => 'sftp_import',
-        :key_public_content  => 'ssh rsa sftp-import',
-        :key_private_name    => 'sftp_import',
-        :key_private_content => 'private key',
+        :ssh_options          => { 'Host' => 'dev' },
+        :mode_ssh_dir         => '0750',
+        :mode_authorized_key  => '0440',
+        :mode_ssh_config_file => '0440',
+        :key_authorized       => 'ssh rsa dev',
+        :key_public_name      => 'sftp_import',
+        :key_public_content   => 'ssh rsa sftp-import',
+        :key_private_name     => 'sftp_import',
+        :key_private_content  => 'private key',
       }
     end
 
     it { is_expected.to contain_users__ssh('user1').with(
       {
         :ensure              => 'present',
+        :mode_ssh_dir        => '0750',
+        :mode_authorized_key => '0440',
+        :mode_config_file    => '0440',
         :key_authorized      => 'ssh rsa dev',
         :key_public_name     => 'sftp_import',
         :key_public_content  => 'ssh rsa sftp-import',

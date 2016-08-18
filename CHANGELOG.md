@@ -1,3 +1,13 @@
+## 18-08-2016 release 0.7.0
+  * Introduced new parameter in ssh type
+    - parameter `mode_ssh_dir`, `mode_authorized_key` and `mode_config_file`
+  * Introduced new parameter in manager type
+    - parameter `mode_ssh_dir`, `mode_authorized_key` and `mode_ssh_config_file`
+  * [FEATURE] allow to import ssh keys to any directory as root user
+  * rename hidden variables
+  * Introduced new parameter in ssh type
+    - parameter `group`
+
 ## 02-06-2015 release 0.5.0
   * Introduced new parameter to users::manage
     - parameter "group"
