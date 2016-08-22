@@ -1,6 +1,6 @@
 {
   "name": "phononet-users",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "author": "Siegfried Wanke",
   "summary": "This module manage the linux user",
   "license": "Apache-2.0",

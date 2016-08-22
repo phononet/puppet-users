@@ -2,7 +2,7 @@
 define users::ssh (
   $ensure              = 'present',
   $user                = $title,
-  $group               = $title,
+  $group               = undef,
   $home                = 'UNSET',
   $mode_ssh_dir        = '0700',
   $mode_authorized_key = '0640',
@@ -43,7 +43,10 @@ define users::ssh (
   }
   else {
     $_user  = $user
-    $_group = $group
+    $_group = $group ? {
+      undef   => $user,
+      default => $group,
+    }
     $key_ensure_real = $key_ensure
   }
 
@@ -54,7 +57,7 @@ define users::ssh (
     group  => $_group,
     mode   => $mode_ssh_dir,
   }
-  ensure_resource( 'file', "ssh_dir_${user}", $ssh_dir )
+  ensure_resource('file', "ssh_dir_${_user}", $ssh_dir)
 
   if $key_authorized != 'UNSET' {
     file { "key_authorized_${title}":

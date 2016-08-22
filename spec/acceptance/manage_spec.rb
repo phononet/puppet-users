@@ -146,6 +146,36 @@ describe 'users::manage' do
     end
   end
 
+  context 'create multi ssh keys' do
+    it do
+      pp = <<-EOS
+        users::manage { 'user35':
+          ensure              => 'present',
+          key_public_content  => 'ssh-rsa user35',
+          key_private_content => 'RSA PRIVATE',
+        }
+        users::ssh { 'user35_import':
+          user                => 'user35',
+          key_public_name     => 'import_id_rsa',
+          key_public_content  => 'ssh-rsa user35-import',
+          key_private_name    => 'import_id_rsa',
+          key_private_content => 'RSA PRIVATE import',
+        }
+      EOS
+      apply_manifest(pp, :catch_falures => true)
+    end
+
+    describe file('/home/user35/.ssh/id_rsa') do
+      it { is_expected.to exist }
+      it { is_expected.to be_owned_by 'user35' }
+    end
+
+    describe file('/home/user35/.ssh/import_id_rsa') do
+      it { is_expected.to exist }
+      it { is_expected.to be_owned_by 'user35' }
+    end
+  end
+
   context 'create sftp users' do
     it do
       pp = <<-EOS
