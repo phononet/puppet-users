@@ -1,3 +1,8 @@
+## 22-08-2016 release 0.8.0
+  * Intoduced new parameters
+   * `bash_profile_source`, `bash_profile_content and ``
+   * `bashrc_source` and `bashrc_content`
+
 ## 18-08-2016 release 0.7.0
   * Introduced new parameter in ssh type
     - parameter `mode_ssh_dir`, `mode_authorized_key` and `mode_config_file`

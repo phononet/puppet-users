@@ -28,6 +28,11 @@ define users::manage (
   $key_private_name     = undef,
   $key_private_content  = undef,
   $key_private_source   = undef,
+  $bashrc_content       = undef,
+  $bashrc_source        = undef,
+  $bashrc_file_name     = undef,
+  $bash_profile_content = undef,
+  $bash_profile_source  = undef,
 )
 {
   validate_bool($sftp_jail)
@@ -55,13 +60,18 @@ define users::manage (
   }
 
   users::home { $title:
-    ensure  => $ensure,
-    home    => $home,
-    owner   => $_home_owner,
-    group   => $_home_group,
-    mode    => $mode,
-    force   => $remove_home,
-    require => Users::User[$title],
+    ensure               => $ensure,
+    home                 => $home,
+    owner                => $_home_owner,
+    group                => $_home_group,
+    mode                 => $mode,
+    force                => $remove_home,
+    bashrc_content       => $bashrc_content,
+    bashrc_source        => $bashrc_source,
+    bashrc_file_name     => $bashrc_file_name,
+    bash_profile_content => $bash_profile_content,
+    bash_profile_source  => $bash_profile_source,
+    require              => Users::User[$title],
   }
 
   if $sftp_jail {

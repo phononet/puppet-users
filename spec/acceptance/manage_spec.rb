@@ -41,8 +41,10 @@ describe 'users::manage' do
           comment => 'Test User',
         }
         users::manage { 'user33':
-          ensure  => 'present',
-          group   => 'developer',
+          ensure               => 'present',
+          group                => 'developer',
+          bashrc_content       => 'alias testfunction_bashrc=""',
+          bash_profile_content => 'alias testfunction_profile=""',
         }
         users::manage { 'user34':
           ensure  => 'present',
@@ -78,6 +80,16 @@ describe 'users::manage' do
       it { is_expected.to be_mode '755' }
       it { is_expected.to be_owned_by 'user33' }
       it { is_expected.to be_grouped_into 'developer' }
+    end
+
+    describe file('/home/user33/.bash_profile') do
+      it { is_expected.to exist }
+      it { is_expected.to be_mode '644' }
+    end
+
+    describe file('/home/user33/.bashrc') do
+      it { is_expected.to exist }
+      it { is_expected.to be_mode '644' }
     end
 
     describe group('developer') do

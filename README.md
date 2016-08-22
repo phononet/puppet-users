@@ -136,6 +136,16 @@ users::account
 
   Remove user home directory by `absent`. Default value is `false`.
 
+#####`bashrc_content`
+
+#####`bashrc_source`
+
+#####`bashrc_file_name`
+
+#####`bash_profile_content`
+
+#####`bash_profile_source`
+
 ####users::user
 
 #####`ensure`
@@ -171,6 +181,20 @@ users::account
 #####`home`
 
 #####`force`
+
+#####`owner`
+
+#####`group`
+
+#####`bashrc_content`
+
+#####`bashrc_source`
+
+#####`bashrc_file_name`
+
+#####`bash_profile_content`
+
+#####`bash_profile_source`
 
 ####users::ssh
 
