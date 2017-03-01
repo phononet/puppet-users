@@ -67,7 +67,7 @@ define users::ssh (
       group   => $_group,
       mode    => $mode_authorized_key,
       require => File["ssh_dir_${user}"],
-      content => template( 'users/authorized_keys.erb' )
+      content => template('users/authorized_keys.erb')
     }
   }
 
