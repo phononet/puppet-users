@@ -26,6 +26,7 @@ define users::user (
     $_groups     = undef
     $_comment    = undef
     $_membership = undef
+    $user_group  = undef
   } else {
     $_ensure     = $ensure
     $_home       = $home ? {
