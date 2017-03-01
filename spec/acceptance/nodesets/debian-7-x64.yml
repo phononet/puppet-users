@@ -1,0 +1,12 @@
+HOSTS:
+  debian-7-x64:
+    roles:
+      - agent
+      - default
+    platform: debian-7-amd64
+    hypervisor: vagrant
+    box_url: http://images.phononet.local/vagrant/wheezy64/
+    box: wheezy64
+    CONFIG:
+      type: foss
+
