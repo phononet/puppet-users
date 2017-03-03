@@ -1,8 +1,11 @@
 HOSTS:
   ubuntu-1404-x64:
     roles:
-      - master
-    platform: ubuntu-14-amd64
-    box: trusty64
-    box_url: http://images.phononet.local/vagrant/trusty64
+      - agent
+      - default
+    platform: ubuntu-14.04-amd64
     hypervisor: vagrant
+    box_url: http://images.phononet.local/vagrant/trusty64/
+    box: trusty64
+CONFIG:
+  type: foss

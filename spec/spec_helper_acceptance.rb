@@ -2,17 +2,31 @@ require 'beaker-rspec'
 require 'beaker/puppet_install_helper'
 
 PUPPET_VERSION = ENV['PUPPET_VERSION'] || '3.8.7'
-PUPPET_INSTALL_TYPE="foss"
-PUPPET_INSTALL_VERSION="3"
 
-install_puppet_from_gem_on(hosts, { :version => PUPPET_VERSION })
-#run_puppet_install_helper
+if PUPPET_VERSION == "3.8.7"
+  PUPPET_INSTALL_VERSION = 3
+  PUPPET_INSTALL_TYPE = "foss"
+else
+  PUPPET_INSTALL_VERSION = 4
+  PUPPET_INSTALL_TYPE = "agent"
+end
 
-UNSUPPORTED_PLATFORMS = [ 'Windows', 'Solaris', 'AIX' ] 
+puts PUPPET_INSTALL_VERSION
+puts PUPPET_INSTALL_TYPE
+
+if PUPPET_INSTALL_VERSION < 4
+  install_puppet_from_gem_on(hosts, { :version => PUPPET_VERSION })
+else
+  run_puppet_install_helper
+end
+
+UNSUPPORTED_PLATFORMS = [ 'Windows', 'Solaris', 'AIX' ]
 
 RSpec.configure do |c|
   # Project root
   proj_root = File.expand_path(File.join(File.dirname(__FILE__), '..'))
+  modules_dir = File.dirname(proj_root)
+  ignore_files = {:ignore => [".bundle", ".git", ".hg", ".idea", ".vagrant", ".vendor", "vendor", "acceptance", "bundle", "spec", "tests", "log", ".", ".."]}
 
   # Readable test descriptions
   c.formatter = :documentation
