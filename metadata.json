@@ -1,13 +1,12 @@
 {
   "name": "phononet-users",
   "version": "0.7.1",
-  "author": "Siegfried Wanke",
+  "author": "Siegfried Wanke <swanke@phononet.de>",
   "summary": "This module manage the linux user",
   "license": "Apache-2.0",
-  "source": "http://repo.phononet.local/hg/admin/puppet-modules/phononet-users/",
-  "project_page": null,
-  "issues_url": null,
-  "description": "This module create and delete linux user",
+  "source": "http://repo.phononet.local/hg/admin/puppet-modules/phononet-users",
+  "project_page": "http://trac.phononet.local/admin",
+  "issues_url": "http://trac.phononet.local/admin",
   "operatingsystem_support": [
     {
       "operatingsystem": "Debian",
@@ -28,10 +27,10 @@
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 3.7.0 < 5.0.0"
+      "version_requirement": ">= 3.8.7 < 5.0.0"
     }
   ],
   "dependencies": [
-    {"name":"puppetlabs/stdlib","version_requirement":">= 4.2.0"}
+    {"name":"puppetlabs-stdlib","version_requirement":">= 4.2.0 < 5.0.0"}
   ]
 }

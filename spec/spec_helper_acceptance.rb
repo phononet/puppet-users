@@ -11,9 +11,6 @@ else
   PUPPET_INSTALL_TYPE = "agent"
 end
 
-puts PUPPET_INSTALL_VERSION
-puts PUPPET_INSTALL_TYPE
-
 if PUPPET_INSTALL_VERSION < 4
   install_puppet_from_gem_on(hosts, { :version => PUPPET_VERSION })
 else
@@ -42,7 +39,7 @@ RSpec.configure do |c|
     # Install module and dependencies
     puppet_module_install(:source => proj_root, :module_name => 'users')
     hosts.each do |host|
-      on host, puppet('module','install','puppetlabs-stdlib')
+      on host, puppet('module','install', 'puppetlabs-stdlib')
     end
   end
 end
