@@ -1,4 +1,4 @@
-## UNRELEASED
+## 2017-03-31 v0.7.2
 
  * cosmetics (future parser)
  * fix `STRIC_VARIABLES`
