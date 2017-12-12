@@ -1,4 +1,4 @@
-# == Define users::home
+#
 define users::home (
   $ensure               = 'directory',
   $force                = false,

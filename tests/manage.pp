@@ -4,11 +4,11 @@ users::manage { 'root':
 }
 
 users::manage { 'user1':
-  ensure      => 'present',
-  ssh_options => { 'Host *' => { 'X11Forwarding' => 'no' } },
-  remove_home => true,
-  key_authorized      => [ 'ssh-rsa test', 'ssh-dsa test', ],
-  groups      => [ 'adm' ],
+  ensure         => 'present',
+  ssh_options    => { 'Host *' => { 'X11Forwarding' => 'no' } },
+  remove_home    => true,
+  key_authorized => [ 'ssh-rsa test', 'ssh-dsa test', ],
+  groups         => [ 'adm' ],
 }
 
 users::manage { 'user2':

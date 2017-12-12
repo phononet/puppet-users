@@ -76,14 +76,14 @@ define users::user (
   }
 
   if $_ensure == 'absent' {
-    Anchor["users::user::${title}::start"] ->
-      User[$title] ->
-      Group[$_group] ->
-      Anchor["users::user::${title}::end"]
+    Anchor["users::user::${title}::start"]
+    -> User[$title]
+    -> Group[$_group]
+    -> Anchor["users::user::${title}::end"]
   } else {
-    Anchor["users::user::${title}::start"] ->
-      Group[$_group] ->
-      User[$title] ->
-      Anchor["users::user::${title}::end"]
+    Anchor["users::user::${title}::start"]
+    -> Group[$_group]
+    -> User[$title]
+    -> Anchor["users::user::${title}::end"]
   }
 }
