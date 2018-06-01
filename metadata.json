@@ -7,18 +7,19 @@
   "source": "http://repo.phononet.local/hg/admin/puppet-modules/phononet-users",
   "project_page": "http://trac.phononet.local/admin",
   "issues_url": "http://trac.phononet.local/admin",
+  "tags": ["template_module"],
   "operatingsystem_support": [
     {
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
         "7",
-        "8"
+        "8",
+        "9"
       ]
     },
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "12.04",
         "14.04",
         "16.04"
       ]
@@ -27,10 +28,17 @@
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 3.8.7 < 5.0.0"
+      "version_requirement": ">= 4.10.0 < 6.0.0"
     }
   ],
   "dependencies": [
-    {"name":"puppetlabs-stdlib","version_requirement":">= 4.2.0 < 5.0.0"}
-  ]
+    {
+      "name": "puppetlabs-stdlib",
+      "version_requirement": ">= 4.2.0 < 5.0.0"
+    }
+  ],
+  "description": "This module manage the linux user",
+  "pdk-version": "1.5.0",
+  "template-url": "https://github.com/puppetlabs/pdk-templates",
+  "template-ref": "1.5.0-0-gd1b3eca"
 }
