@@ -1,17 +1,15 @@
 #
+# users::jail
+#
 define users::jail (
-  $ensure       = 'present',
-  $home         = "/home/${title}",
-  $user         = $title,
-  $owner        = undef,
-  $group        = undef,
-  $mode         = '0755',
-  $dirs         = ['in', 'out'],
+  $ensure                    = 'present',
+  Stdlib::Absolutepath $home = "/home/${title}",
+  String $user               = $title,
+  $owner                     = undef,
+  $group                     = undef,
+  $mode                      = '0755',
+  Array $dirs                = ['in', 'out'],
 ){
-  validate_array($dirs)
-  validate_absolute_path($home)
-  validate_string($user)
-
   $_home = prefix($dirs, "${home}/")
 
   $ensure_dir = $ensure ? {

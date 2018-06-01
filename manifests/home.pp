@@ -1,4 +1,6 @@
 #
+# user::home
+#
 define users::home (
   $ensure               = 'directory',
   $force                = false,

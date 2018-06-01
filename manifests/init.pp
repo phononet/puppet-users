@@ -1,30 +1,41 @@
 #
+# users
+#
+# @param account
+#  [Hash] Create accounts
+#
+# @param ssh
+#  [Hash] Create ssh keys
+#
+# @param user
+#  [Hash] Create users
+#
+# @param group
+#  [Hash] Create groups
+#
+# @param home
+#  [Hash] Create home
+#
 class users (
-  $account = '',
-  $ssh     = '',
-  $user    = '',
-  $group   = '',
-  $home    = '',
+  Optional[Hash] $account = undef,
+  Optional[Hash] $ssh     = undef,
+  Optional[Hash] $user    = undef,
+  Optional[Hash] $group   = undef,
+  Optional[Hash] $home    = undef,
 ){
-
-  if $account != '' {
-    validate_hash($account)
+  if $account {
     create_resources('::users::manage', $account)
   }
-  if $ssh != '' {
-    validate_hash($ssh)
+  if $ssh {
     create_resources('::users::ssh', $ssh)
   }
-  if $user != '' {
-    validate_hash($user)
+  if $user {
     create_resources('::users::user', $user)
   }
-  if $group != '' {
-    validate_hash($group)
+  if $group {
     create_resources('::users::group', $group)
   }
-  if $home != '' {
-    validate_hash($home)
+  if $home {
     create_resources('::users::home', $home)
   }
 }

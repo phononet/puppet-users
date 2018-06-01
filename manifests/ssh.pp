@@ -1,4 +1,6 @@
-# == Define users::ssh
+#
+# users::ssh
+#
 define users::ssh (
   $ensure              = 'present',
   $user                = $title,

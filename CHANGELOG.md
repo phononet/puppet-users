@@ -1,6 +1,8 @@
 ## UNRELEASED 0.7.3
 
  * cosmetics (pdk validate)
+ * fix pdk warnings
+ * puppet 5 suport
 
 ## 2017-03-31 v0.7.2
 

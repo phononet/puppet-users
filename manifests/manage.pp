@@ -1,4 +1,5 @@
-# Define: users::manage
+#
+# users::manage
 #
 define users::manage (
   $uid                  = undef,
@@ -13,8 +14,8 @@ define users::manage (
   $groups               = undef,
   $comment              = undef,
   $password             = undef,
-  $remove_home          = false,
-  $sftp_jail            = false,
+  Boolean $remove_home  = false,
+  Boolean $sftp_jail    = false,
   $sftp_jail_dirs       = undef,
   $ssh_options          = undef,
   $mode_ssh_dir         = undef,
@@ -33,11 +34,7 @@ define users::manage (
   $bashrc_file_name     = undef,
   $bash_profile_content = undef,
   $bash_profile_source  = undef,
-)
-{
-  validate_bool($sftp_jail)
-  validate_bool($remove_home)
-
+) {
   if $sftp_jail {
     $_home_owner = 'root'
     $_home_group = 'root'

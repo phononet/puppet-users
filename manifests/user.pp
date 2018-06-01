@@ -1,4 +1,6 @@
-# == Define users.user
+#
+# users.user
+#
 define users::user (
   $uid      = undef,
   $gid      = undef,

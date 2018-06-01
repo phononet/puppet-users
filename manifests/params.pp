@@ -1,4 +1,6 @@
-# == Class users::params
+#
+# users::params
+#
 class users::params {
   $shell = '/bin/bash'
   $home  = '/home'
