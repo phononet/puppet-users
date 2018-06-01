@@ -8,7 +8,7 @@ describe 'users::user' do
           ensure => 'present',
         }
       EOS
-      apply_manifest(pp, :catch_falures => true)
+      apply_manifest(pp, catch_falures: true)
     end
 
     describe user('user10') do
@@ -16,22 +16,22 @@ describe 'users::user' do
       it { is_expected.to belong_to_primary_group 'user10' }
       it { is_expected.to have_home_directory '/home/user10' }
       it { is_expected.to have_login_shell '/bin/bash' }
-      its(:encrypted_password) { is_expected.to match(/!/) }
+      its(:encrypted_password) { is_expected.to match(%r{!}) }
     end
-    
+
     describe file('/home/user10') do
-      it { is_expected.to_not exist }
+      it { is_expected.not_to exist }
     end
   end
 
   context 'manage root user' do
-    it 'should remove root user' do
+    it 'removes root user' do
       pp = <<-EOS
         users::user { 'root':
           ensure => 'absent',
         }
       EOS
-      apply_manifest(pp, :catch_failures => true)
+      apply_manifest(pp, catch_failures: true)
     end
 
     describe user('root') do
@@ -50,14 +50,14 @@ describe 'users::user' do
           groups => 'adm',
         }
       EOS
-      apply_manifest(pp, :catch_failures => true)
+      apply_manifest(pp, catch_failures: true)
     end
 
     describe user('root') do
       it { is_expected.to have_home_directory '/root' }
       it { is_expected.to have_uid '0' }
       it { is_expected.to belong_to_primary_group 'root' }
-      it { is_expected.to_not belong_to_group 'adm' }
+      it { is_expected.not_to belong_to_group 'adm' }
     end
   end
 
@@ -84,7 +84,7 @@ describe 'users::user' do
         password => '$6$0cNtxAC6$gJLgql9AVBVnay62aRjP687.7GyRx3C8NN7ErB45kqgPGg2Gz0OYQ/ixg3fM/rqr4xgXtDpo8.UJqmU/27NBY/',
       }
       EOS
-      apply_manifest(pp, :catch_failures => true)
+      apply_manifest(pp, catch_failures: true)
     end
 
     describe user('user1') do
@@ -94,9 +94,9 @@ describe 'users::user' do
       it { is_expected.to have_login_shell '/bin/sh' }
       it { is_expected.to have_uid '5001' }
       it { is_expected.to belong_to_group 'adm' }
-      #its(:encrypted_password) { is_expected.to match(/\$6\$.{8}\$.{86}$/) }
+      # its(:encrypted_password) { is_expected.to match(/\$6\$.{8}\$.{86}$/) }
     end
-    
+
     describe user('user2') do
       it { is_expected.to exist }
       it { is_expected.to belong_to_primary_group 'user2' }
@@ -104,15 +104,15 @@ describe 'users::user' do
       it { is_expected.to have_login_shell '/bin/sh' }
       it { is_expected.to have_uid '5002' }
       it { is_expected.to belong_to_group 'adm' }
-      #its(:encrypted_password) { is_expected.to match(/\$6\$.{8}\$.{86}$/) }
+      # its(:encrypted_password) { is_expected.to match(/\$6\$.{8}\$.{86}$/) }
     end
-    
+
     describe file('/home/pub/user1') do
-      it { is_expected.to_not exist }
+      it { is_expected.not_to exist }
     end
 
     describe file('/home/pub/user2') do
-      it { is_expected.to_not exist }
+      it { is_expected.not_to exist }
     end
   end
 
@@ -126,7 +126,7 @@ describe 'users::user' do
         group => 'sharegroup',
       }
       EOS
-      apply_manifest(pp, :catch_failures => true)
+      apply_manifest(pp, catch_failures: true)
     end
 
     describe user('user21') do
@@ -146,7 +146,7 @@ describe 'users::user' do
       users::user { 'user21': }
       users::user { 'user22': }
       EOS
-      apply_manifest(pp, :catch_failures => true)
+      apply_manifest(pp, catch_failures: true)
     end
 
     describe user('user21') do
@@ -178,7 +178,7 @@ describe 'users::user' do
         gid => 5022,
       }
       EOS
-      apply_manifest(pp, :catch_failures => true)
+      apply_manifest(pp, catch_failures: true)
     end
 
     describe group('user21') do

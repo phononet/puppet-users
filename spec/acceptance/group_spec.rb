@@ -2,13 +2,13 @@ require 'spec_helper_acceptance'
 
 describe 'users::group' do
   context 'default parameters' do
-    it 'should create group' do
+    it 'creates group' do
       pp = <<-EOS
         users::group { group1:
           ensure => 'present',
         }
       EOS
-      apply_manifest(pp, :catch_failures => true)
+      apply_manifest(pp, catch_failures: true)
     end
 
     describe group('group1') do
@@ -17,14 +17,14 @@ describe 'users::group' do
   end
 
   context 'set parameters' do
-    it 'should create group with gid and member' do
+    it 'creates group with gid and member' do
       pp = <<-EOS
         users::group { group2:
           ensure => 'present',
           gid    => '6002',
         }
       EOS
-      apply_manifest(pp, :catch_failures => true)
+      apply_manifest(pp, catch_failures: true)
     end
 
     describe group('group2') do

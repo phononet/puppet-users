@@ -8,25 +8,25 @@ describe 'users' do
       end
 
       context 'default params' do
-        it { should_not contain_users__account('') }
-        it { should_not contain_users__ssh('') }
-        it { should_not contain_users__user('') }
-        it { should_not contain_users__group('') }
+        it { is_expected.not_to contain_users__account('') }
+        it { is_expected.not_to contain_users__ssh('') }
+        it { is_expected.not_to contain_users__user('') }
+        it { is_expected.not_to contain_users__group('') }
       end
       context 'set all parameters' do
         let :params do
           {
-            :ssh   => { 'user1' => { 'ensure' => 'present' } },
-            :user  => { 'user1' => { 'ensure' => 'present' } },
-            :home  => { 'user1' => { 'ensure' => 'present' } },
-            :group => { 'dev' => { 'ensure' => 'present' } },
+            ssh: { 'user1' => { 'ensure' => 'present' } },
+            user: { 'user1' => { 'ensure' => 'present' } },
+            home: { 'user1' => { 'ensure' => 'present' } },
+            group: { 'dev' => { 'ensure' => 'present' } },
           }
         end
 
-        it { should contain_users__ssh('user1') }
-        it { should contain_users__user('user1') }
-        it { should contain_users__home('user1') }
-        it { should contain_users__group('dev') }
+        it { is_expected.to contain_users__ssh('user1') }
+        it { is_expected.to contain_users__user('user1') }
+        it { is_expected.to contain_users__home('user1') }
+        it { is_expected.to contain_users__group('dev') }
       end
     end
   end

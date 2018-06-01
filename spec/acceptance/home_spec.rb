@@ -12,7 +12,7 @@ describe 'users::home' do
           ensure  => 'present',
         }
       EOS
-      apply_manifest(pp, :catche_falures => true)
+      apply_manifest(pp, catche_falures: true)
     end
 
     describe file('/home/user50') do
@@ -21,11 +21,11 @@ describe 'users::home' do
     end
 
     describe file('/home/user50/.bashrc') do
-      it { is_expected.to_not exist }
+      it { is_expected.not_to exist }
     end
 
     describe file('/home/user50/.bash_profile') do
-      it { is_expected.to_not exist }
+      it { is_expected.not_to exist }
     end
   end
 
@@ -41,15 +41,15 @@ describe 'users::home' do
           bash_profile_content => 'TESTVARIABLE="testvariable"',
         }
       EOS
-      apply_manifest(pp, :catche_falures => true)
+      apply_manifest(pp, catche_falures: true)
     end
 
     describe file('/home/user51/.bashrc') do
-      its(:content) { is_expected.to match /alias testfunction=""/ }
+      its(:content) { is_expected.to match %r{alias testfunction=""} }
     end
 
     describe file('/home/user51/.bash_profile') do
-      its(:content) { is_expected.to match /TESTVARIABLE="testvariable"/ }
+      its(:content) { is_expected.to match %r{TESTVARIABLE="testvariable"} }
     end
   end
 
@@ -65,15 +65,15 @@ describe 'users::home' do
           bash_profile_source => '/etc/skel/.profile',
         }
       EOS
-      apply_manifest(pp, :catche_falures => true)
+      apply_manifest(pp, catche_falures: true)
     end
 
     describe file('/home/user51/.bashrc') do
-      its(:content) { is_expected.to match /\~\/\.bashrc: executed by bash/ }
+      its(:content) { is_expected.to match %r{\~/\.bashrc: executed by bash} }
     end
 
     describe file('/home/user51/.bash_profile') do
-      its(:content) { is_expected.to match /set PATH so it includes/ }
+      its(:content) { is_expected.to match %r{set PATH so it includes} }
     end
   end
 end

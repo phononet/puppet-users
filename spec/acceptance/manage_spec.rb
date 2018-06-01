@@ -12,7 +12,7 @@ describe 'users::manage' do
       EOS
     end
 
-    it_behaves_like "a idempotent resource"
+    it_behaves_like 'a idempotent resource'
 
     describe user('user30') do
       it { is_expected.to exist }
@@ -52,7 +52,7 @@ describe 'users::manage' do
         }
       EOS
 
-      apply_manifest(pp, :catch_falures => true)
+      apply_manifest(pp, catch_falures: true)
     end
 
     describe user('user31') do
@@ -114,23 +114,23 @@ describe 'users::manage' do
         }
       EOS
 
-      apply_manifest(pp, :catch_falures => true)
+      apply_manifest(pp, catch_falures: true)
     end
 
     describe user('user31') do
-      it { is_expected.to_not exist }
+      it { is_expected.not_to exist }
     end
 
     describe file('/home/user31') do
-      it { is_expected.to_not exist }
+      it { is_expected.not_to exist }
     end
 
     describe user('user33') do
-      it { is_expected.to_not exist }
+      it { is_expected.not_to exist }
     end
 
     describe file('/home/user33') do
-      it { is_expected.to_not exist }
+      it { is_expected.not_to exist }
     end
 
     describe group('developer') do
@@ -162,7 +162,7 @@ describe 'users::manage' do
           key_private_content => 'RSA PRIVATE import',
         }
       EOS
-      apply_manifest(pp, :catch_falures => true)
+      apply_manifest(pp, catch_falures: true)
     end
 
     describe file('/home/user35/.ssh/id_rsa') do
@@ -187,7 +187,7 @@ describe 'users::manage' do
           require   => Users::Group['sftpuser'],
         }
       EOS
-      apply_manifest(pp, :catch_falures => true)
+      apply_manifest(pp, catch_falures: true)
     end
 
     describe user('user35') do

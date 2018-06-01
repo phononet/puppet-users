@@ -13,7 +13,7 @@ describe 'users::jail' do
       EOS
     end
 
-    it_behaves_like "a idempotent resource"
+    it_behaves_like 'a idempotent resource'
 
     describe user('user70') do
       it { is_expected.to exist }
@@ -48,7 +48,7 @@ describe 'users::jail' do
           dirs => ['incoming', 'outgoing'],
         }
       EOS
-      apply_manifest(pp, :catche_falures => true)
+      apply_manifest(pp, catche_falures: true)
     end
 
     describe file('/home/user70/incoming') do

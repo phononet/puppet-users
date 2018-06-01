@@ -19,13 +19,13 @@ describe 'users::ssh' do
           key_private_content => 'ssh private user40',
         }
       EOS
-      apply_manifest(pp, :catch_falures => true)
+      apply_manifest(pp, catch_falures: true)
     end
 
     describe user('user40') do
       it { is_expected.to exist }
     end
-    
+
     describe file('/home/user40/.ssh') do
       it { is_expected.to exist }
       it { is_expected.to be_mode '700' }
@@ -38,7 +38,7 @@ describe 'users::ssh' do
       it { is_expected.to be_mode '640' }
       it { is_expected.to be_owned_by 'user40' }
       it { is_expected.to be_grouped_into 'user40' }
-      its(:content) { is_expected.to match /ssh-rsa test user10/ }
+      its(:content) { is_expected.to match %r{ssh-rsa test user10} }
     end
 
     describe file('/home/user40/.ssh/id_rsa.pub') do
@@ -46,7 +46,7 @@ describe 'users::ssh' do
       it { is_expected.to be_mode '640' }
       it { is_expected.to be_owned_by 'user40' }
       it { is_expected.to be_grouped_into 'user40' }
-      its(:content) { is_expected.to match /ssh-rsa test user40/ }
+      its(:content) { is_expected.to match %r{ssh-rsa test user40} }
     end
 
     describe file('/home/user40/.ssh/id_rsa') do
@@ -54,7 +54,7 @@ describe 'users::ssh' do
       it { is_expected.to be_mode '600' }
       it { is_expected.to be_owned_by 'user40' }
       it { is_expected.to be_grouped_into 'user40' }
-      its(:content) { is_expected.to match /ssh private user40/ }
+      its(:content) { is_expected.to match %r{ssh private user40} }
     end
   end
 
@@ -82,13 +82,13 @@ describe 'users::ssh' do
           options             => { 'Host' => '*' },
         }
       EOS
-      apply_manifest(pp, :catch_falures => true)
+      apply_manifest(pp, catch_falures: true)
     end
 
     describe user('user41') do
       it { is_expected.to exist }
     end
-    
+
     describe file('/home/user41/.ssh') do
       it { is_expected.to exist }
       it { is_expected.to be_mode '550' }
@@ -96,7 +96,7 @@ describe 'users::ssh' do
 
     describe file('/home/user41/.ssh/config') do
       it { is_expected.to exist }
-      its(:content) { is_expected.to match /Host \*/ }
+      its(:content) { is_expected.to match %r{Host \*} }
       it { is_expected.to be_mode '440' }
     end
 
