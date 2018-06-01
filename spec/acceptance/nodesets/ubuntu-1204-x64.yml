@@ -1,11 +1,16 @@
+---
+# This file is managed via modulesync
+# https://github.com/voxpupuli/modulesync
+# https://github.com/voxpupuli/modulesync_config
 HOSTS:
   ubuntu-1204-x64:
     roles:
       - agent
-      - default
     platform: ubuntu-12.04-amd64
-    hypervisor: vagrant
-    box_url: http://images.phononet.local/vagrant/precise64/
     box: precise64
+    box_url: http://images.phononet.local/vagrant/precise64/
+    hypervisor: vagrant
 CONFIG:
   type: foss
+...
+# vim: syntax=yaml

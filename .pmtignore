@@ -1,7 +1,5 @@
-bin/
-pkg/
 docs/
-tmp/
+pkg/
 Gemfile.lock
 Gemfile.local
 vendor/
@@ -20,8 +18,3 @@ Puppetfile.lock
 *.iml
 .*.sw?
 .yardoc/
-.yardwarns
-Guardfile
-.DS_Store
-.metadata
-junit/

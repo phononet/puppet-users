@@ -3,12 +3,12 @@
 # https://github.com/voxpupuli/modulesync
 # https://github.com/voxpupuli/modulesync_config
 HOSTS:
-  debian-7-x64:
+  ubuntu-1604-x64:
     roles:
       - agent
-    platform: debian-7-amd64
-    box: wheezy64
-    box_url: http://images.phononet.local/vagrant/wheezy64/
+    platform: ubuntu-16.04-amd64
+    box: xenial64
+    box_url: ubuntu/xenial64
     hypervisor: vagrant
 CONFIG:
   type: foss
