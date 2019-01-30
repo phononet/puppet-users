@@ -1,3 +1,6 @@
+## UNRELEASED 0.7.4 2019-01-30
+ * pdk: convert to 1.8
+
 ## UNRELEASED 0.7.3
 
  * cosmetics (pdk validate)
