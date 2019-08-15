@@ -29,7 +29,7 @@ run_puppet_install_helper unless ENV['BEAKER_provision'] == 'no'
 install_module_on(hosts)
 # install_module_dependencies_on(hosts)
 
-UNSUPPORTED_PLATFORMS = %w[Windows Solaris AIX].freeze
+UNSUPPORTED_PLATFORMS = ['Windows', 'Solaris', 'AIX'].freeze
 
 RSpec.configure do |c|
   # Project root

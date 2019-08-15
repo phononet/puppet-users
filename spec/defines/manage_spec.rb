@@ -62,7 +62,7 @@ describe 'users::manage' do
         let(:params) do
           {
             sftp_jail: true,
-            sftp_jail_dirs: %w[incoming outgoing],
+            sftp_jail_dirs: ['incoming', 'outgoing'],
           }
         end
 
@@ -70,7 +70,7 @@ describe 'users::manage' do
           is_expected.to contain_users__jail('user1').with(
             ensure: 'present',
             home: '/home/user1',
-            dirs: %w[incoming outgoing],
+            dirs: ['incoming', 'outgoing'],
           )
         }
 

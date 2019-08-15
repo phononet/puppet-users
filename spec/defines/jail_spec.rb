@@ -32,7 +32,7 @@ describe 'users::jail' do
       context 'set dirs parameter' do
         let(:params) do
           {
-            dirs: %w[incoming output],
+            dirs: ['incoming', 'output'],
           }
         end
 
