@@ -1,0 +1,4 @@
+---
+vagrant:
+  provisioner: vagrant 
+  images: ['debian/buster64', 'ubuntu/bionic64']
