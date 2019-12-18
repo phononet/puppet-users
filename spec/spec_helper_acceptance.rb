@@ -1,112 +1,82 @@
-require 'beaker-rspec'
-require 'beaker/puppet_install_helper'
-require 'beaker/module_install_helper'
+# frozen_string_literal: true
 
-puppet_repo_url = 'http://apt.puppetlabs.com'
-# TODO: lsbdistcode dynamic
-puppet_release_package = "puppet-release-#{shell('lsb_release -c -s').stdout.chomp}.deb"
+require 'serverspec'
+require 'puppet_litmus'
+require 'spec_helper_acceptance_local' if File.file?(File.join(File.dirname(__FILE__), 'spec_helper_acceptance_local.rb'))
+include PuppetLitmus
 
-phononet_repo_url = 'http://debrepo.phononet.local'
-phononet_release_package = 'phononet-keyring.deb'
-
-phononet_scm_url = 'https://scm.phononet.local'
-phononet_scm_modules_path = 'infra/puppet-modules/pn'
-phononet_scm_puppet_modules = "#{phononet_scm_url}/#{phononet_scm_modules_path}"
-
-git_repos = [
-  # { mod: 'users', repo: "#{phononet_scm_puppet_modules}/phononet-users" }
-]
-
-hosts.each do |host|
-  # install puppet repository
-  on(host, "wget #{puppet_repo_url}/#{puppet_release_package}")
-  on(host, "dpkg -i #{puppet_release_package}")
-  # install phononet repository
-  on(host, "wget #{phononet_repo_url}/#{phononet_release_package}")
-  on(host, "dpkg -i #{phononet_release_package}")
-end
-run_puppet_install_helper unless ENV['BEAKER_provision'] == 'no'
-install_module_on(hosts)
-# install_module_dependencies_on(hosts)
-
-UNSUPPORTED_PLATFORMS = ['Windows', 'Solaris', 'AIX'].freeze
-
-RSpec.configure do |c|
-  # Project root
-  module_path = '/etc/puppetlabs/code/modules'
-
-  # Readable test descriptions
-  c.formatter = :documentation
-
-  # detect the situation where PUP-5016 is triggered and skip the idempotency tests in that case
-  # also note how fact('puppetversion') is not available because of PUP-4359
-  if fact('osfamily') == 'Debian' && fact('operatingsystemmajrelease') == '8' && shell('puppet --version').stdout =~ %r{^4\.2}
-    c.filter_run_excluding skip_pup_5016: true
+if ENV['TARGET_HOST'].nil? || ENV['TARGET_HOST'] == 'localhost'
+  puts 'Running tests against this machine !'
+  if Gem.win_platform?
+    set :backend, :cmd
+  else
+    set :backend, :exec
   end
+else
+  # load inventory
+  inventory_hash = inventory_hash_from_inventory_file
+  node_config = config_from_node(inventory_hash, ENV['TARGET_HOST'])
 
-  # Configure all nodes in nodeset
-  c.before :suite do
-    # Install module and dependencies
-    hosts.each do |host|
-      puppet_version = on(host, 'puppet --version').stdout
-      puts("PHONONET Debrepo URL: #{phononet_repo_url}")
-      puts("PHONONET SCM URL: #{phononet_scm_puppet_modules}")
-      puts("Puppet-Version: #{puppet_version}")
+  if target_in_group(inventory_hash, ENV['TARGET_HOST'], 'docker_nodes')
+    host = ENV['TARGET_HOST']
+    set :backend, :docker
+    set :docker_container, host
+  elsif target_in_group(inventory_hash, ENV['TARGET_HOST'], 'ssh_nodes')
+    set :backend, :ssh
+    options = Net::SSH::Config.for(host)
+    options[:user] = node_config.dig('ssh', 'user') unless node_config.dig('ssh', 'user').nil?
+    options[:port] = node_config.dig('ssh', 'port') unless node_config.dig('ssh', 'port').nil?
+    options[:keys] = node_config.dig('ssh', 'private-key') unless node_config.dig('ssh', 'private-key').nil?
+    options[:password] = node_config.dig('ssh', 'password') unless node_config.dig('ssh', 'password').nil?
+    # Support both net-ssh 4 and 5.
+    # rubocop:disable Metrics/BlockNesting
+    options[:verify_host_key] = if node_config.dig('ssh', 'host-key-check').nil?
+                                  # Fall back to SSH behavior. This variable will only be set in net-ssh 5.3+.
+                                  if @strict_host_key_checking.nil? || @strict_host_key_checking
+                                    Net::SSH::Verifiers::Always.new
+                                  else
+                                    # SSH's behavior with StrictHostKeyChecking=no: adds new keys to known_hosts.
+                                    # If known_hosts points to /dev/null, then equivalent to :never where it
+                                    # accepts any key beacuse they're all new.
+                                    Net::SSH::Verifiers::AcceptNewOrLocalTunnel.new
+                                  end
+                                elsif node_config.dig('ssh', 'host-key-check')
+                                  if defined?(Net::SSH::Verifiers::Always)
+                                    Net::SSH::Verifiers::Always.new
+                                  else
+                                    Net::SSH::Verifiers::Secure.new
+                                  end
+                                elsif defined?(Net::SSH::Verifiers::Never)
+                                  Net::SSH::Verifiers::Never.new
+                                else
+                                  Net::SSH::Verifiers::Null.new
+                                end
+    # rubocop:enable Metrics/BlockNesting
+    host = if ENV['TARGET_HOST'].include?(':')
+             ENV['TARGET_HOST'].split(':').first
+           else
+             ENV['TARGET_HOST']
+           end
+    set :host,        options[:host_name] || host
+    set :ssh_options, options
+    set :request_pty, true
+  elsif target_in_group(inventory_hash, ENV['TARGET_HOST'], 'winrm_nodes')
+    require 'winrm'
 
-      on(host, puppet('module', 'install', 'puppetlabs-stdlib'))
+    set :backend, :winrm
+    set :os, family: 'windows'
+    user = node_config.dig('winrm', 'user') unless node_config.dig('winrm', 'user').nil?
+    pass = node_config.dig('winrm', 'password') unless node_config.dig('winrm', 'password').nil?
+    endpoint = "http://#{ENV['TARGET_HOST']}:5985/wsman"
 
-      if fact('osfamily') == 'Debian'
-        pp = <<-EOS
-        class { '::apt': }
-        apt::source { 'phononet':
-          location => '#{phononet_repo_url}/phononet/',
-          release  => $lsbdistcodename,
-          repos    => main,
-          include  => { source => false },
-          pin      => '1000',
-        } ->
-        apt::source { 'phononet-unstable':
-          location => '#{phononet_repo_url}/phononet/',
-          release  => unstable,
-          repos    => main,
-          include  => { source => false },
-          pin      => '1000',
-        } ->
-        apt::source { '#{fact('lsbdistcodename')}-unstable':
-          location => '#{phononet_repo_url}/phononet/',
-          release  => #{fact('lsbdistcodename')}-unstable,
-          repos    => main,
-          include  => { source => false },
-          pin      => '1000',
-          notify   => 'Exec[apt_update]',
-        }
-        EOS
-      end
+    opts = {
+      user: user,
+      password: pass,
+      endpoint: endpoint,
+      operation_timeout: 300,
+    }
 
-      if fact('osfamily') == 'Debian'
-        on(host, puppet('module', 'install', 'puppetlabs-apt'))
-        apply_manifest_on(hosts, pp, catch_failures: false)
-      end
-
-      # install modules from git
-      # TODO: work out how to do branches and tags
-      next if git_repos.empty?
-      install_package(host, 'git')
-      on(host, 'git config --global http.sslVerify false')
-      git_repos.each do |g|
-        step "Installing puppet module \'#{g[:repo]}\' from git on Master to #{module_path}/#{g[:mod]}"
-        on(host, "git clone #{g[:repo]} #{module_path}/#{g[:mod]}")
-      end
-    end
-  end
-end
-
-shared_examples 'a idempotent resource' do
-  it 'applies with no errors' do
-    apply_manifest(pp, catch_failures: true)
-  end
-
-  it 'applies a second time without changes', :skip_pup_5016 do
-    apply_manifest(pp, catch_changes: true)
+    winrm = WinRM::Connection.new opts
+    Specinfra.configuration.winrm = winrm
   end
 end

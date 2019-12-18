@@ -1,6 +1,6 @@
 fixtures:
   repositories:
-    stdlib:
-      repo: "https://github.com/puppetlabs/puppetlabs-stdlib.git"
-  symlinks:
-    users: "#{source_dir}"
+    facts: 'https://github.com/puppetlabs/puppetlabs-facts.git'
+    puppet_agent: 'https://github.com/puppetlabs/puppetlabs-puppet_agent.git'
+    provision: 'https://github.com/puppetlabs/provision.git'
+    stdlib: 'https://github.com/puppetlabs/puppetlabs-stdlib.git'

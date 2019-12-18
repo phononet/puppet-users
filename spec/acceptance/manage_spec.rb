@@ -12,7 +12,9 @@ describe 'users::manage' do
       EOS
     end
 
-    it_behaves_like 'a idempotent resource'
+    it 'applies the manifest twice with no stderr' do
+      idempotent_apply(pp)
+    end
 
     describe user('user30') do
       it { is_expected.to exist }

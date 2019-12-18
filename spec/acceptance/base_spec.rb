@@ -1,14 +1,15 @@
 require 'spec_helper_acceptance'
 
 describe 'users' do
-  context 'default parameters' do
+  describe 'with "/usr/bin/test -e %"' do
     let(:pp) do
-      <<-EOS
+      <<-MANIFEST
       include '::users'
-      EOS
+      MANIFEST
     end
 
-    # Run it twice and test for idempotency
-    it_behaves_like 'a idempotent resource'
+    it 'applies the manifest twice with no stderr' do
+      idempotent_apply(pp)
+    end
   end
 end
