@@ -25,7 +25,6 @@ define users::user (
     $_home       = '/root'
     $_system     = false
     $_group      = 'root'
-    $_groups     = undef
     $_comment    = undef
     $_membership = undef
     $user_group  = undef
@@ -39,7 +38,6 @@ define users::user (
     $_gid        = $gid
     $_system     = $system
     $_group      = $group
-    $_groups     = $groups
     $_comment    = $comment
     $_membership = 'inclusive'
 
@@ -70,7 +68,7 @@ define users::user (
     gid        => $user_group,
     comment    => $_comment,
     home       => $_home,
-    groups     => $_groups,
+    groups     => $groups,
     shell      => $_shell,
     system     => $_system,
     password   => $password,

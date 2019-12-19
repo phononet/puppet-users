@@ -11,11 +11,27 @@ describe 'users::user' do
         let(:title) { 'root' }
         let(:params) do
           {
+            uid: '111',
+            gid: '111',
+            system: true,
+            group: 'testroot',
+            comment: 'TEST ROOT',
             home: '/home/test',
+            groups: ['testgroup'],
           }
         end
 
-        it { is_expected.to contain_user('root').with(home: '/root') }
+        it do
+          is_expected.to contain_user('root').with(
+            uid: nil,
+            gid: nil,
+            system: false,
+            groups: ['testgroup'],
+            home: '/root',
+            comment: nil,
+          )
+        end
+        it { is_expected.to contain_group('root') }
       end
 
       context 'user1' do
