@@ -57,7 +57,7 @@ describe 'users::user' do
       it { is_expected.to have_home_directory '/root' }
       it { is_expected.to have_uid '0' }
       it { is_expected.to belong_to_primary_group 'root' }
-      it { is_expected.not_to belong_to_group 'adm' }
+      it { is_expected.to belong_to_group 'adm' }
     end
   end
 
