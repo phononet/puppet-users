@@ -2,6 +2,9 @@
 .travis.yml:
   delete: true
 
+appveyor.yml:
+  delete: true
+
 Gemfile:
   required:
     ':system_tests':
@@ -24,5 +27,8 @@ Gemfile:
       - gem: beaker-rspec
         from_env: BEAKER_RSPEC_VERSION
 
-appveyor.yml:
-  delete: true
+.gitlab-ci.yml:
+  defaults:
+    ruby_versions:
+      '2.4.5':
+        puppet_version: '~> 6'

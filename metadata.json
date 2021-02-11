@@ -10,22 +10,22 @@
   "dependencies": [
     {
       "name": "puppetlabs-stdlib",
-      "version_requirement": ">= 4.2.0 < 5.0.0"
+      "version_requirement": ">= 4.2.0 < 7.0.0"
     }
   ],
   "operatingsystem_support": [
     {
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
-        "8",
-        "9"
+        "9",
+        "10"
       ]
     },
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "14.0",
-        "16.04"
+        "16.04",
+        "18.04"
       ]
     }
   ],
@@ -41,7 +41,7 @@
     "ssh"
   ],
   "description": "This module manage the linux user",
-  "pdk-version": "1.15.0",
-  "template-url": "https://github.com/puppetlabs/pdk-templates#1.15.0",
-  "template-ref": "tags/1.15.0-0-g0bc522e"
+  "pdk-version": "1.18.1",
+  "template-url": "https://github.com/puppetlabs/pdk-templates#1.18.1",
+  "template-ref": "tags/1.18.1-0-g3d2e75c"
 }

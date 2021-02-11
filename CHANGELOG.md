@@ -1,4 +1,7 @@
 # CHANGELOG
+
+## [0.9.0] (2021-02-11)
+* pdk: update to 1.18.1
 ## [0.8.0] (2019-12-19)
 * pdk: convert to 1.15.0
 * tests: migrate to litmus
