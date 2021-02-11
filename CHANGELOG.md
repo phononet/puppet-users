@@ -2,6 +2,8 @@
 
 ## [0.9.0] (2021-02-11)
 * pdk: update to 1.18.1
+* introduced new parameters `sftp_jail_mode` `sftp_jail_group`
+
 ## [0.8.0] (2019-12-19)
 * pdk: convert to 1.15.0
 * tests: migrate to litmus

@@ -82,6 +82,26 @@ describe 'users::manage' do
         }
       end
 
+      context 'user1 with sftp parameters' do
+        let(:params) do
+          {
+            sftp_jail: true,
+            sftp_jail_dirs: ['incoming', 'outgoing'],
+            sftp_jail_mode: '0775',
+            sftp_jail_group: 'phononet',
+          }
+        end
+
+        it {
+          is_expected.to contain_users__jail('user1').with(
+            ensure: 'present',
+            dirs: ['incoming', 'outgoing'],
+            mode: '0775',
+            group: 'phononet',
+          )
+        }
+      end
+
       context 'user1 with key parameters' do
         let(:params) do
           {

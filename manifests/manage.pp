@@ -17,6 +17,8 @@ define users::manage (
   Boolean $remove_home  = false,
   Boolean $sftp_jail    = false,
   $sftp_jail_dirs       = undef,
+  $sftp_jail_mode       = undef,
+  $sftp_jail_group      = undef,
   $ssh_options          = undef,
   $mode_ssh_dir         = undef,
   $mode_authorized_key  = undef,
@@ -74,8 +76,8 @@ define users::manage (
   if $sftp_jail {
     users::jail { $title:
       ensure  => $ensure,
-      mode    => $mode,
-      group   => $group,
+      mode    => $sftp_jail_mode,
+      group   => $sftp_jail_group,
       home    => $home,
       dirs    => $sftp_jail_dirs,
       require => Users::User[$title],
